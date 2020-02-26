@@ -1,20 +1,17 @@
 import RPi.GPIO as maket_pins
 import time
-import multiprocessing as mp
 import socket
-import struct
+import pygame
 
 
-def military_base(conrtol_pin):
-    print('change red')
-    print('open roof')
-    print('start timer')
-    print('switch music to game')
-    maket_pins.output(conrtol_pin, 1)
-    time.sleep(1)
-    maket_pins.output(conrtol_pin, 0)
-    time.sleep(1)
-
+# (18 - relay 1,
+# 16 - relay 2,
+# 22 - relay 3,
+# 24 - relay 4,
+# 26 - relay 5,
+# 40 - relay 6,
+# 38 - relay 7,
+# 36 - relay 8)
 
 
 class Maket_CTF:
@@ -24,8 +21,9 @@ class Maket_CTF:
         for pin in self.relay_list:
             maket_pins.setup(pin, maket_pins.OUT)
         print('start class')
-        self.host_name = '10.50.16.5'
-        self.port_name = 8080
+        self.host_name = '10.50.16.71'
+        self.port_name = 12345
+        self.list_of_building = ['military', 'electrostation', 'goverment', 'weather', 'rls', 'home']
 
     def init_building(self):
         for pin in self.relay_list:
@@ -39,24 +37,42 @@ class Maket_CTF:
             maket_pins.output(pin, 0)
             time.sleep(1)
 
-    def electrostation(self, control_pin):
+    def military_base(self, control_pin):
+        print('change red')
+        print('open roof')
+        print('start timer')
+        print('switch music to game')
+        file = 'asking-alexandria-alone-in-a-room_456510653.mp3'
+        maket_pins.output(control_pin, 1)
+        pygame.init()
+        pygame.mixer.init()
+        pygame.mixer.music.load(file)
+        pygame.mixer.music.play()
+
+    def electrostation(self, led_pin, smoke_pin):
         print('change red')
         print('switch off smoke')
         print('switch music to dingg')
+        maket_pins.output(led_pin, 1)
+        maket_pins.output(smoke_pin, 1)
 
-    def goverment(self, conrtol_pin):
+    def goverment(self, control_pin):
         print('change red')
         print('switch off light')
         print('play song')
+        maket_pins.output(control_pin, 1)
 
     def weather_station(self, control_pin):
         print('change red')
+        maket_pins.output(control_pin, 1)
 
     def rls_system(self, control_pin):
         print('change red')
+        maket_pins.output(control_pin, 1)
 
     def home_build(self, control_pin):
         print('change red')
+        maket_pins.output(control_pin, 1)
 
     def clean_all(self):
         maket_pins.cleanup()
@@ -67,29 +83,40 @@ class Maket_CTF:
             while True:
                 data = self.s.recv(1024)
                 value = data.decode('utf-8')
-                value = int(value)
-                if value % 3 == 0:
-                    military_base(self.relay_list[0])
-
+                if value in self.list_of_building:
+                    if value == self.list_of_building[0]:
+                        self.military_base(self.relay_list[0])
+                    if value == self.list_of_building[1]:
+                        self.electrostation(self.relay_list[1], self.relay_list[7])
+                    if value == self.list_of_building[2]:
+                        self.goverment(self.relay_list[2])
+                    if value == self.list_of_building[3]:
+                        self.goverment(self.relay_list[3])
+                    if value == self.list_of_building[4]:
+                        self.goverment(self.relay_list[4])
+                    if value == self.list_of_building[5]:
+                        self.goverment(self.relay_list[5])
                 else:
-                    print(value)
+                    print('wait')
+                # if value % 3 == 0:
+                #     self.military_base(self.relay_list[0])
+                # else:
+                #     print(value)
 
 
 if __name__ == "__main__":
-    maket = Maket_CTF()
-    print('start work')
-    maket.init_building()
+    try:
+        maket = Maket_CTF()
+        print('start work')
+        maket.init_building()
 
-    # proc = mp.Process(target=maket.read_socket, args=(message,))
-    # proc.start()
-    maket.read_socket()
+        # proc = mp.Process(target=maket.read_socket, args=(message,))
+        # proc.start()
+        maket.read_socket()
 
-    # maket.test_code()
-    maket.clean_all()
+        # maket.test_code()
+    except KeyboardInterrupt:
+        for pin in (18, 16, 22, 24, 26, 40, 38, 36):
+            maket_pins.output(pin, 0)
 
-# maket_pin.output(16, 1)
-# maket_pin.output(18, 1)
-# time.sleep(10)
-# maket_pin.output(16, 0)
-# maket_pin.output(18, 0)
-# time.sleep(1)
+        maket.clean_all()
