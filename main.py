@@ -2,6 +2,7 @@ import RPi.GPIO as maket_pins
 import time
 import socket
 import pygame
+import Adafruit_PCA9685
 
 
 # (18 - relay 1,
@@ -24,10 +25,18 @@ class Maket_CTF:
         self.host_name = '10.50.16.71'
         self.port_name = 12345
         self.list_of_building = ['military', 'electrostation', 'goverment', 'weather', 'rls', 'home']
+        self.pwm = Adafruit_PCA9685.PCA9685(address=0x41)
+        self.servo_min = 150
+        self.servo_max = 600
+        self.pwm.set_pwm_freq(50)
 
     def init_building(self):
         for pin in self.relay_list:
             maket_pins.output(pin, 0)
+
+        self.pwm.set_pwm(0, 0, self.servo_min)
+        self.pwm.set_pwm(1, 0, self.servo_min)
+        time.sleep(1)
 
     def test_code(self):
         for pin in self.relay_list:
@@ -97,6 +106,7 @@ class Maket_CTF:
                     if value == self.list_of_building[5]:
                         self.goverment(self.relay_list[5])
                 else:
+                    self.init_building()
                     print('wait')
                 # if value % 3 == 0:
                 #     self.military_base(self.relay_list[0])
