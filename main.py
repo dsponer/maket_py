@@ -23,7 +23,7 @@ class Maket_CTF:
             maket_pins.setup(pin, maket_pins.OUT)
         print('start class')
         self.host_name = '10.50.16.71'
-        self.port_name = 12345
+        self.port_name = 4321
         self.list_of_building = ['military', 'electrostation', 'goverment', 'weather', 'rls', 'home']
         self.pwm = Adafruit_PCA9685.PCA9685(address=0x41)
         self.servo_min = 150
@@ -53,10 +53,10 @@ class Maket_CTF:
         print('switch music to game')
         file = 'asking-alexandria-alone-in-a-room_456510653.mp3'
         maket_pins.output(control_pin, 1)
-        pygame.init()
-        pygame.mixer.init()
-        pygame.mixer.music.load(file)
-        pygame.mixer.music.play()
+        # pygame.init()
+        # pygame.mixer.init()
+        # pygame.mixer.music.load(file)
+        # pygame.mixer.music.play()
 
     def electrostation(self, led_pin, smoke_pin):
         print('change red')
@@ -106,12 +106,15 @@ class Maket_CTF:
                     if value == self.list_of_building[5]:
                         self.goverment(self.relay_list[5])
                 else:
-                    self.init_building()
+                    self.off_all()
                     print('wait')
                 # if value % 3 == 0:
                 #     self.military_base(self.relay_list[0])
                 # else:
                 #     print(value)
+    def off_all(self):
+        for pin in self.relay_list:
+            maket_pins.output(pin, 0)
 
 
 if __name__ == "__main__":
