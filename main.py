@@ -24,7 +24,7 @@ class Maket_CTF:
         print('start class')
         self.host_name = '10.50.16.71'
         self.port_name = 4321
-        self.list_of_building = ['military', 'electrostation', 'goverment', 'weather', 'rls', 'home']
+        self.list_of_building = ['military', 'electrostation', 'goverment', 'weather', 'rls', 'bank']
         self.pwm = Adafruit_PCA9685.PCA9685(address=0x41)
         self.servo_min = 150
         self.servo_max = 600
@@ -112,6 +112,7 @@ class Maket_CTF:
                 #     self.military_base(self.relay_list[0])
                 # else:
                 #     print(value)
+
     def off_all(self):
         for pin in self.relay_list:
             maket_pins.output(pin, 0)

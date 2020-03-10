@@ -7,6 +7,7 @@ from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.uic import loadUi
 
 
+
 class MainWindow(QDialog):
     def __init__(self):
         super().__init__()
@@ -14,7 +15,7 @@ class MainWindow(QDialog):
 
         self.host_name = '10.50.16.71'
         self.port_name = 4321
-        self.list_of_building = ['military', 'electrostation', 'goverment', 'weather', 'rls', 'home']
+        self.list_of_building = ['military', 'electrostation', 'goverment', 'weather', 'rls', 'bank']
 
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.bind((self.host_name, self.port_name))
