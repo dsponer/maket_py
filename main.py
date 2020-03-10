@@ -18,24 +18,26 @@ import Adafruit_PCA9685
 class Maket_CTF:
     def __init__(self):
         maket_pins.setmode(maket_pins.BOARD)
-        self.relay_list = (18, 16, 22, 24, 26, 40, 38, 36)
+        self.relay_list = (22, 18, 16, 40, 26, 24, 38, 36)
         for pin in self.relay_list:
             maket_pins.setup(pin, maket_pins.OUT)
         print('start class')
-        self.host_name = '10.50.16.71'
+        self.host_name = '10.193.53.204'
         self.port_name = 4321
         self.list_of_building = ['military', 'electrostation', 'goverment', 'weather', 'rls', 'bank']
         self.pwm = Adafruit_PCA9685.PCA9685(address=0x41)
         self.servo_min = 150
         self.servo_max = 600
         self.pwm.set_pwm_freq(50)
+        # pygame.init()
+        # pygame.mixer.init()
 
     def init_building(self):
         for pin in self.relay_list:
             maket_pins.output(pin, 0)
 
-        self.pwm.set_pwm(0, 0, self.servo_min)
-        self.pwm.set_pwm(1, 0, self.servo_min)
+        # self.pwm.set_pwm(0, 0, self.servo_min)
+        # self.pwm.set_pwm(1, 0, self.servo_min)
         time.sleep(1)
 
     def test_code(self):
@@ -51,12 +53,11 @@ class Maket_CTF:
         print('open roof')
         print('start timer')
         print('switch music to game')
-        file = 'asking-alexandria-alone-in-a-room_456510653.mp3'
+        file = 'rls.mp3'
         maket_pins.output(control_pin, 1)
-        # pygame.init()
-        # pygame.mixer.init()
         # pygame.mixer.music.load(file)
         # pygame.mixer.music.play()
+
 
     def electrostation(self, led_pin, smoke_pin):
         print('change red')

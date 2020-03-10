@@ -7,13 +7,12 @@ from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.uic import loadUi
 
 
-
 class MainWindow(QDialog):
     def __init__(self):
         super().__init__()
         loadUi('dialog.ui', self)
 
-        self.host_name = '10.50.16.71'
+        self.host_name = '10.193.53.204'
         self.port_name = 4321
         self.list_of_building = ['military', 'electrostation', 'goverment', 'weather', 'rls', 'bank']
 
